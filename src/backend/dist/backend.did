@@ -1,0 +1,435 @@
+type _ImmutableObjectStorageRefillResult = 
+ record {
+   success: opt bool;
+   topped_up_amount: opt nat;
+ };
+type _ImmutableObjectStorageRefillInformation = record {
+                                                  proposed_top_up_amount:
+                                                   opt nat;};
+type _ImmutableObjectStorageCreateCertificateResult = 
+ record {
+   blob_hash: text;
+   method: text;
+ };
+type WorkingHours = 
+ record {
+   close_time: text;
+   days_open: vec text;
+   open_time: text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type TreatmentStatus = 
+ variant {
+   active;
+   cancelled;
+   completed;
+ };
+type TreatmentInput = 
+ record {
+   dentist_id: DentistId;
+   estimated_cost: float64;
+   notes: text;
+   patient_id: PatientId;
+   procedures: vec ToothProcedure;
+   title: text;
+ };
+type TreatmentId = nat;
+type Treatment = 
+ record {
+   clinic_id: ClinicId;
+   created_at: Timestamp;
+   dentist_id: DentistId;
+   estimated_cost: float64;
+   id: TreatmentId;
+   notes: text;
+   patient_id: PatientId;
+   procedures: vec ToothProcedure;
+   status: TreatmentStatus;
+   title: text;
+   updated_at: Timestamp;
+ };
+type ToothStatus = 
+ variant {
+   crowned;
+   decayed;
+   extracted;
+   filled;
+   healthy;
+   implant;
+   missing;
+   other;
+ };
+type ToothProcedure = 
+ record {
+   completed_at: opt Timestamp;
+   dentist_id: DentistId;
+   notes: text;
+   procedure_type: text;
+   status: ProcedureStatus;
+   tooth_number: nat;
+ };
+type ToothEntry = 
+ record {
+   dentist_id: DentistId;
+   last_updated: Timestamp;
+   procedure_type: opt text;
+   status: ToothStatus;
+   tooth_number: nat;
+ };
+type ToothChart = 
+ record {
+   clinic_id: ClinicId;
+   created_at: Timestamp;
+   id: EntityId;
+   patient_id: PatientId;
+   teeth: vec ToothEntry;
+   treatment_id: opt TreatmentId;
+ };
+type Timestamp = int;
+type StaffRole = 
+ variant {
+   admin;
+   doctor;
+   receptionist;
+ };
+type StaffMember = 
+ record {
+   clinic_id: ClinicId;
+   email: text;
+   hire_date: text;
+   id: StaffId;
+   is_active: bool;
+   license_number: text;
+   name: text;
+   phone: text;
+   "principal": principal;
+   qualification: text;
+   role: StaffRole;
+ };
+type StaffInput = 
+ record {
+   email: text;
+   hire_date: text;
+   license_number: text;
+   name: text;
+   phone: text;
+   "principal": principal;
+   qualification: text;
+   role: StaffRole;
+ };
+type StaffId = nat;
+type ProcedureStatus = 
+ variant {
+   cancelled;
+   completed;
+   inProgress;
+   planned;
+ };
+type PrescriptionInput = 
+ record {
+   dentist_id: DentistId;
+   medications: vec Medication;
+   patient_id: PatientId;
+   treatment_id: opt TreatmentId;
+ };
+type PrescriptionId = nat;
+type Prescription = 
+ record {
+   clinic_id: ClinicId;
+   created_at: Timestamp;
+   dentist_id: DentistId;
+   id: PrescriptionId;
+   is_active: bool;
+   medications: vec Medication;
+   patient_id: PatientId;
+   treatment_id: opt TreatmentId;
+ };
+type PaymentMethod = 
+ variant {
+   card;
+   cash;
+   cheque;
+   netBanking;
+   other;
+   upi;
+ };
+type Payment = 
+ record {
+   amount: float64;
+   date: Timestamp;
+   method: PaymentMethod;
+   reference: text;
+ };
+type PatientInput = 
+ record {
+   address: text;
+   allergies: vec text;
+   blood_group: BloodGroup;
+   date_of_birth: text;
+   email: text;
+   first_name: text;
+   gender: Gender;
+   last_name: text;
+   medical_history: text;
+   phone: text;
+ };
+type PatientId = nat;
+type Patient = 
+ record {
+   address: text;
+   allergies: vec text;
+   blood_group: BloodGroup;
+   clinic_id: ClinicId;
+   created_at: Timestamp;
+   date_of_birth: text;
+   email: text;
+   first_name: text;
+   gender: Gender;
+   id: PatientId;
+   last_name: text;
+   medical_history: text;
+   phone: text;
+   updated_at: Timestamp;
+ };
+type Medication = 
+ record {
+   dosage: text;
+   duration: text;
+   frequency: text;
+   name: text;
+   notes: text;
+ };
+type LabOrderStatus = 
+ variant {
+   cancelled;
+   completed;
+   inProgress;
+   pending;
+ };
+type LabOrderInput = 
+ record {
+   cost: float64;
+   due_date: text;
+   lab_name: text;
+   notes: text;
+   patient_id: PatientId;
+   procedure_type: text;
+   specifications: text;
+   treatment_id: opt TreatmentId;
+ };
+type LabOrderId = nat;
+type LabOrder = 
+ record {
+   clinic_id: ClinicId;
+   completed_date: opt text;
+   cost: float64;
+   created_at: Timestamp;
+   due_date: text;
+   id: LabOrderId;
+   lab_name: text;
+   notes: text;
+   patient_id: PatientId;
+   procedure_type: text;
+   specifications: text;
+   status: LabOrderStatus;
+   treatment_id: opt TreatmentId;
+ };
+type ItemId = nat;
+type InvoiceStatus = 
+ variant {
+   cancelled;
+   draft;
+   issued;
+   paid;
+   partiallyPaid;
+ };
+type InvoiceItem = 
+ record {
+   amount: float64;
+   description: text;
+   gst_rate: float64;
+ };
+type InvoiceInput = 
+ record {
+   items: vec InvoiceItem;
+   patient_id: PatientId;
+ };
+type InvoiceId = nat;
+type Invoice = 
+ record {
+   clinic_id: ClinicId;
+   created_at: Timestamp;
+   gst_total: float64;
+   id: InvoiceId;
+   items: vec InvoiceItem;
+   patient_id: PatientId;
+   payment_history: vec Payment;
+   status: InvoiceStatus;
+   subtotal: float64;
+   total: float64;
+ };
+type InventoryItemInput = 
+ record {
+   category: text;
+   cost_price: float64;
+   expiry_date: opt text;
+   name: text;
+   reorder_level: float64;
+   stock: float64;
+   supplier: text;
+   unit: text;
+ };
+type InventoryItem = 
+ record {
+   category: text;
+   clinic_id: ClinicId;
+   cost_price: float64;
+   expiry_date: opt text;
+   id: ItemId;
+   name: text;
+   reorder_level: float64;
+   stock: float64;
+   supplier: text;
+   unit: text;
+   updated_at: Timestamp;
+ };
+type Gender = 
+ variant {
+   female;
+   male;
+   other;
+ };
+type ExternalBlob = blob;
+type EntityId = nat;
+type Document = 
+ record {
+   "blob": ExternalBlob;
+   clinic_id: ClinicId;
+   filename: text;
+   id: EntityId;
+   mime_type: text;
+   owner_id: EntityId;
+   owner_type: text;
+   uploaded_at: Timestamp;
+   uploaded_by: principal;
+ };
+type DentistId = nat;
+type ClinicSettings = 
+ record {
+   address: text;
+   clinic_id: ClinicId;
+   email: text;
+   gst_number: text;
+   name: text;
+   phone: text;
+   working_hours: WorkingHours;
+ };
+type ClinicId = nat;
+type BloodGroup = 
+ variant {
+   aNeg;
+   aPos;
+   abNeg;
+   abPos;
+   bNeg;
+   bPos;
+   oNeg;
+   oPos;
+   unknown;
+ };
+type AttendanceStatus = 
+ variant {
+   absent;
+   halfDay;
+   present;
+ };
+type Attendance = 
+ record {
+   check_in: opt Timestamp;
+   check_out: opt Timestamp;
+   clinic_id: ClinicId;
+   date: text;
+   id: EntityId;
+   staff_id: EntityId;
+   status: AttendanceStatus;
+ };
+service : {
+  _immutableObjectStorageBlobsAreLive: (hashes: vec blob) -> (vec bool) query;
+  _immutableObjectStorageBlobsToDelete: () -> (vec blob) query;
+  _immutableObjectStorageConfirmBlobDeletion: (blobs: vec blob) -> ();
+  _immutableObjectStorageCreateCertificate: (blobHash: text) ->
+   (_ImmutableObjectStorageCreateCertificateResult);
+  _immutableObjectStorageRefillCashier: (refillInformation:
+   opt _ImmutableObjectStorageRefillInformation) ->
+   (_ImmutableObjectStorageRefillResult);
+  _immutableObjectStorageUpdateGatewayPrincipals: () -> ();
+  _initializeAccessControl: () -> ();
+  adjustInventoryStock: (id: EntityId, delta: float64) -> (opt InventoryItem);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  cancelInvoice: (id: EntityId) -> (bool);
+  createInventoryItem: (input: InventoryItemInput) -> (InventoryItem);
+  createInvoice: (input: InvoiceInput) -> (Invoice);
+  createLabOrder: (input: LabOrderInput) -> (LabOrder);
+  createPatient: (input: PatientInput) -> (Patient);
+  createPrescription: (input: PrescriptionInput) -> (Prescription);
+  createStaffMember: (input: StaffInput) -> (StaffMember);
+  createTreatment: (input: TreatmentInput) -> (Treatment);
+  deactivatePrescription: (id: EntityId) -> (bool);
+  deactivateStaffMember: (id: EntityId) -> (bool);
+  deleteDocument: (id: EntityId) -> (bool);
+  deleteInventoryItem: (id: EntityId) -> (bool);
+  deleteLabOrder: (id: EntityId) -> (bool);
+  deletePatient: (id: EntityId) -> (bool);
+  deletePrescription: (id: EntityId) -> (bool);
+  deleteTreatment: (id: EntityId) -> (bool);
+  getAttendanceByDate: (staff_id: EntityId, date: text) ->
+   (opt Attendance) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getClinicSettings: () -> (opt ClinicSettings) query;
+  getDocument: (id: EntityId) -> (opt Document) query;
+  getExpiryAlerts: (days_ahead: nat) -> (vec InventoryItem) query;
+  getInventoryItem: (id: EntityId) -> (opt InventoryItem) query;
+  getInvoice: (id: EntityId) -> (opt Invoice) query;
+  getLabOrder: (id: EntityId) -> (opt LabOrder) query;
+  getLowStockAlerts: () -> (vec InventoryItem) query;
+  getPatient: (id: EntityId) -> (opt Patient) query;
+  getPrescription: (id: EntityId) -> (opt Prescription) query;
+  getStaffByPrincipal: (p: principal) -> (opt StaffMember) query;
+  getStaffMember: (id: EntityId) -> (opt StaffMember) query;
+  getToothChart: (patient_id: EntityId) -> (opt ToothChart) query;
+  getTreatment: (id: EntityId) -> (opt Treatment) query;
+  isCallerAdmin: () -> (bool) query;
+  listAttendance: (staff_id: opt EntityId, from_date: opt text, to_date:
+   opt text) -> (vec Attendance) query;
+  listDocuments: (owner_id: EntityId, owner_type: text) ->
+   (vec Document) query;
+  listInventoryItems: () -> (vec InventoryItem) query;
+  listInvoices: (patient_id: opt EntityId) -> (vec Invoice) query;
+  listLabOrders: (patient_id: opt EntityId) -> (vec LabOrder) query;
+  listPatients: () -> (vec Patient) query;
+  listPrescriptions: (patient_id: opt EntityId) -> (vec Prescription) query;
+  listStaffMembers: () -> (vec StaffMember) query;
+  listTreatments: (patient_id: opt EntityId) -> (vec Treatment) query;
+  recordAttendance: (staff_id: EntityId, date: text, check_in: opt Timestamp,
+   check_out: opt Timestamp, status: AttendanceStatus) -> (Attendance);
+  recordPayment: (id: EntityId, payment: Payment) -> (opt Invoice);
+  searchPatients: (q: text) -> (vec Patient) query;
+  updateClinicSettings: (settings: ClinicSettings) -> (ClinicSettings);
+  updateInventoryItem: (id: EntityId, input: InventoryItemInput) ->
+   (opt InventoryItem);
+  updateInvoice: (id: EntityId, input: InvoiceInput) -> (opt Invoice);
+  updateLabOrderStatus: (id: EntityId, status: LabOrderStatus,
+   completed_date: opt text) -> (opt LabOrder);
+  updatePatient: (id: EntityId, input: PatientInput) -> (opt Patient);
+  updateStaffMember: (id: EntityId, input: StaffInput) -> (opt StaffMember);
+  updateTreatment: (id: EntityId, input: TreatmentInput) -> (opt Treatment);
+  uploadDocument: (owner_id: EntityId, owner_type: text, filename: text,
+   mime_type: text, "blob": ExternalBlob) -> (Document);
+  upsertToothChart: (patient_id: EntityId, treatment_id: opt EntityId, teeth:
+   vec ToothEntry) -> (ToothChart);
+}

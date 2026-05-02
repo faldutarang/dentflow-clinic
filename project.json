@@ -1,0 +1,27 @@
+{
+  "overview": "A full-featured dental clinic management platform with patient records, digital dental charting, treatment planning, billing with GST, inventory management, staff tracking, prescriptions, lab orders, and role-based dashboards for admins, doctors, and receptionists.",
+  "features": [
+    "Patient registration and medical history",
+    "Digital dental charting with tooth-wise procedure marking",
+    "Treatment planning and tracking",
+    "Billing and GST invoicing with payment tracking",
+    "Inventory with expiry alerts",
+    "Staff management and attendance",
+    "Digital prescription system with PDF export",
+    "Lab order management",
+    "Role-based dashboards (Admin, Doctor, Receptionist)",
+    "Multi-clinic architecture"
+  ],
+  "category": "healthcare",
+  "tags": [
+    "dental",
+    "clinic",
+    "healthcare",
+    "patient-management",
+    "billing",
+    "inventory",
+    "multi-role",
+    "saas"
+  ],
+  "last_updated": "2026-04-30T17:29:33.214Z"
+}
